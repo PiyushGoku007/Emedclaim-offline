@@ -27,6 +27,8 @@ import RefreshIcon from "@mui/icons-material/Refresh";
 import Image from "next/image";
 // import Forgot from "./Forgot";
 
+import toast, { Toaster } from "react-hot-toast";
+
 // const passwordValidationRegex =
 //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
 const emailValidationRegex = /^[\w-\\.]+@([\w-]+\.)+[\w-]{2,4}$/;
@@ -40,6 +42,8 @@ function Login() {
   const [email_id, setId] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<boolean>(false);
+  const [errMsg, setErrMsg] = useState("");
+  const [creMsg, setCreMsg] = useState("");
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
@@ -81,14 +85,22 @@ function Login() {
   // }, [email_id, password, showPassword, capchaCode, tryagain, inputCapcha]);
 
   const handleLogin = async () => {
+    // if (email_id === "" || password === "") {
+    //   setErrMsg("Fill all Fields");
+    //   return;
+    // }
     if (!emailValidationRegex.test(email_id) || password.trim() === "") {
+      setErrMsg("Please Enter valid email and password");
       setError(true);
       setOpen(true);
       return;
     }
     if (inputCapcha !== capchaCode) {
+      toast.error("Incorrect captcha code");
       refreshCapcha();
       setTryagaincaptcha(true);
+      setErrMsg("Incorrect captcha code");
+
       return setOpen(true);
     } else {
       setTryagaincaptcha(false);
@@ -96,21 +108,22 @@ function Login() {
 
     const authData = await auth.signIn(email_id, password);
 
-    if (!authData) {
-      setError(true);
-      setTryagain(true);
-    } else {
+    console.log(authData, "AUTH DATA");
+    if (authData) {
+      toast.success("Login Succesfully");
       setError(false);
       setOpen(false);
-
       setSuccessLogin(true);
-      <Snackbar autoHideDuration={6000} open={open} onClose={handleClose}>
-        <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
-          " User Logged In Successfully"
-        </Alert>
-      </Snackbar>;
+    } else {
+      toast.error("Please try to login with correct credentials");
+      setErrMsg("Please try to login with correct credentials");
+      setError(true);
+      setTryagain(true);
     }
+
+    setErrMsg("");
   };
+  4;
 
   const Heading1 = styled(Typography)(({ theme }) => ({
     padding: theme.spacing(1),
@@ -253,33 +266,6 @@ function Login() {
             (E-MEDICAL CLAIM - OFFLINE PROCESS)
           </Typography>
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            {/* <Typography
-              variant="h1"
-              //sx={{fontSize:"14.22px",color:"#e15a11",fontWeight:"700"}}
-              sx={{
-                fontFamily: "Nunito",
-                fontSize: "20px",
-                fontWeight: "600",
-                lineHeight: "19px",
-                letterSpacing: "0em",
-                textAlign: "center",
-                justifyContent: "center",
-                marginTop: "7px",
-                mb: 2,
-                color: "#fff900",
-              }}
-            >
-              User Login
-            </Typography> */}
-          </Box>
-
           <Box>
             <Typography
               variant="body1"
@@ -311,6 +297,7 @@ function Login() {
                   fontSize: "12px !important",
                 },
               }}
+              required
               onInput={(event: any) => setId(event.target.value)}
             />
 
@@ -341,10 +328,12 @@ function Login() {
                 fontSize: "12px !important",
                 height: "27px",
               }}
+              required
               onChange={(e) => setPassword(e.target.value)}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
+                    title="toggle password visibility"
                     aria-label="toggle password visibility"
                     onClick={handleClickShowPassword}
                     onMouseDown={handleMouseDownPassword}
@@ -412,12 +401,14 @@ function Login() {
                 {capchaCode}
               </p>
               <Button
+                title="Refresh"
                 onClick={refreshCapcha}
                 startIcon={<RefreshIcon sx={{ color: "#fff900" }} />}
               ></Button>
             </Box>
 
             <LoginButton
+              title="Login"
               onClick={handleLogin}
               size="small"
               sx={{ fontSize: "15px", py: 1, width: "100%", mt: 2 }}
@@ -426,6 +417,7 @@ function Login() {
             </LoginButton>
 
             <Box
+              title="forgot password"
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
@@ -448,6 +440,7 @@ function Login() {
                 Forgot Password ?
               </ResendOTP>
             </Box>
+            <Toaster />
           </Box>
           {error && (
             <Typography
@@ -459,11 +452,11 @@ function Login() {
                 fontWeight: "800",
               }}
             >
-              Invalid Email or Password, Please try again
+              {errMsg}
             </Typography>
           )}
 
-          {tryagaincaptcha && (
+          {/* {creMsg && (
             <Typography
               sx={{
                 display: "flex",
@@ -473,20 +466,9 @@ function Login() {
                 fontWeight: "800",
               }}
             >
-              Invalid Captcha, Please try again
+              {creMsg}
             </Typography>
-          )}
-          <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-            <Alert
-              onClose={handleClose}
-              severity="error"
-              sx={{ width: "100%" }}
-            >
-              {tryagaincaptcha
-                ? "Invalid Captcha, Please try again"
-                : " Invalid Email or Password, Please try again"}
-            </Alert>
-          </Snackbar>
+          )} */}
         </Box>
       </Box>
     </Box>

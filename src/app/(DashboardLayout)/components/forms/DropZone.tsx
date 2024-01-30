@@ -94,7 +94,7 @@ export default function MyDropzone(props: any) {
   };
 
   const Para = () => {
-    return <p style={{ color: "red" }}>( .png or .jpg only )</p>;
+    return <p style={{ color: "red" }}>( .png, .jpg or .pdf only )</p>;
   };
 
   return (
@@ -116,9 +116,12 @@ export default function MyDropzone(props: any) {
             <em>None</em>
           </MenuItem>
           {toUpload.map((item) => {
+            console.log(item, "Item");
             return (
               <MenuItem key={item} value={item}>
-                {item?.replace(/_/g, " ")}
+                {item
+                  ?.replace(/_/g, " ")
+                  .replace(/\b\w/g, (char) => char.toUpperCase())}
               </MenuItem>
             );
           })}
@@ -249,6 +252,7 @@ export default function MyDropzone(props: any) {
             disabled={billFiles.length === 0}
             variant="contained"
             onClick={handleSave}
+            title="save"
           >
             Save
           </Button>
@@ -297,7 +301,9 @@ export default function MyDropzone(props: any) {
               )}
             </DialogContent>
             <DialogActions>
-              <Button onClick={handleClosePreview}>Close</Button>
+              <Button title="Close" onClick={handleClosePreview}>
+                Close
+              </Button>
             </DialogActions>
           </Dialog>
         </Grid>

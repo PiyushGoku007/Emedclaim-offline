@@ -61,6 +61,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           payload: {
             isAuthenticated: false,
             user: null,
+            validationErrors: null,
           },
         });
       }
@@ -81,6 +82,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
       const user = response.data;
       localStorage.setItem("login", JSON.stringify(user));
+      console.log(user, "USER");
       dispatch({
         type: SIGN_IN,
         payload: {
@@ -88,8 +90,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           isAuthenticated: true,
         },
       });
-
-      return router.push("/dashboard");
+      router.push("/dashboard");
+      return true;
     } catch (err: any) {
       console.error("Error during sign-in:", err);
       dispatch({
@@ -99,18 +101,15 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           validationErrors: err.error,
         },
       });
+      return false;
     }
   };
 
   const signOut = async () => {
-    try {
-      setSession(null);
-      dispatch({ type: SIGN_OUT });
+    setSession(null);
+    dispatch({ type: SIGN_OUT, isAuthenticated: false, user: {} });
 
-      localStorage.setItem("login", "user logout");
-    } catch (err) {
-      console.error("Error during sign-out:", err);
-    }
+    localStorage.setItem("login", "user logout");
   };
 
   const contextValue = useMemo(

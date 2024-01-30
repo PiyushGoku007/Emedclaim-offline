@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   Box,
   AppBar,
@@ -16,6 +16,7 @@ import Link from "next/link";
 import Profile from "./Profile";
 import Image from "next/image";
 import { IconBellRinging, IconMenu } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 interface ItemType {
   toggleMobileSidebar: (event: React.MouseEvent<HTMLElement>) => void;
@@ -23,7 +24,7 @@ interface ItemType {
 
 const Header = ({ toggleMobileSidebar }: ItemType) => {
   const auth: any = useAuth();
-
+  const router: any = useRouter();
   const AppBarStyled = styled(AppBar)(({ theme }) => ({
     boxShadow: "none",
     background: "#F7B924",
@@ -38,6 +39,16 @@ const Header = ({ toggleMobileSidebar }: ItemType) => {
     color: theme.palette.text.secondary,
   }));
 
+  useEffect(() => {
+    const localData: any = localStorage.getItem("login");
+
+    const a = JSON.parse(localData);
+    console.log(a, "LOCAL DATA");
+    if (!a?.data?.user) {
+      router.push("/");
+    }
+  }, []);
+  console.log(auth);
   return (
     <AppBarStyled position="sticky" color="default">
       <ToolbarStyled>

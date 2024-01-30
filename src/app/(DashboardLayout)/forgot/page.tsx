@@ -227,7 +227,7 @@ const Login = (props: any) => {
       >
         {" "}
         <Box sx={{ ml: 2 }}>
-          <Link href={"/login"}>
+          <Link href={"/"}>
             <Tooltip title={"Back"} sx={{ cursor: "pointer" }}>
               <ArrowBackIosIcon />
             </Tooltip>

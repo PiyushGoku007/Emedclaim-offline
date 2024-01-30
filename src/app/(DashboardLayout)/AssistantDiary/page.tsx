@@ -17,6 +17,7 @@ import { useAuth } from "@/contexts/JWTContext/AuthContext.provider";
 import ReactToPrint from "react-to-print";
 import PrintData from "@/utils/AmoutReimbPrint";
 import { BACKEND_BASE_URL } from "@/config";
+import toast, { Toaster } from "react-hot-toast";
 
 function AssistantEntryList() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
@@ -109,6 +110,9 @@ function AssistantEntryList() {
           },
         }
       );
+      if (res) {
+        toast.success("Data Submitted Successfully");
+      }
     } else {
       let res = await axios.put(
         `${BACKEND_BASE_URL}/api/medical/updateDataEntry`,
@@ -120,6 +124,9 @@ function AssistantEntryList() {
           },
         }
       );
+      if (res) {
+        toast.success("Successfully Edited");
+      }
     }
     getData();
     setIsForm(false);
@@ -173,6 +180,7 @@ function AssistantEntryList() {
         return (
           <>
             <Button
+              title={value === 0 ? "Entry" : "Edit"}
               variant="contained"
               color="primary"
               endIcon={<EditNoteIcon />}
@@ -208,7 +216,8 @@ function AssistantEntryList() {
         ...item,
         id: index + 1,
       }));
-      setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+      // setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+      setRows(rowData);
     } catch (error) {
       console.log(error);
     }
@@ -256,10 +265,14 @@ function AssistantEntryList() {
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Box sx={{ flex: "1 1 auto" }} />
 
-                  <Button color="inherit" onClick={handleReset}>
+                  <Button title="reset" color="inherit" onClick={handleReset}>
                     Reset
                   </Button>
-                  <Button variant="outlined" onClick={handleSubmit}>
+                  <Button
+                    title="submit"
+                    variant="outlined"
+                    onClick={handleSubmit}
+                  >
                     Submit
                   </Button>
                 </Box>
@@ -288,6 +301,7 @@ function AssistantEntryList() {
                 </DashboardCard>
                 <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                   <Button
+                    title="Back"
                     variant="contained"
                     onClick={handleBack}
                     sx={{ mr: 1, borderRadius: 30 }}
@@ -297,6 +311,7 @@ function AssistantEntryList() {
                   <Box sx={{ flex: "1 1 auto" }} />
 
                   <Button
+                    title={activeStep === steps.length - 1 ? "Finish" : "Next"}
                     variant="contained"
                     disabled={!nextBtn}
                     onClick={handleNext}
@@ -332,6 +347,7 @@ function AssistantEntryList() {
             />
           </Box>
         )}
+        <Toaster />
       </>
     </DashboardCard>
   );

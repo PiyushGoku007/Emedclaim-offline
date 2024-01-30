@@ -1,5 +1,12 @@
 "use client";
-import { Box, Grid, Typography, FormHelperText } from "@mui/material";
+import {
+  Box,
+  Grid,
+  Typography,
+  FormHelperText,
+  Snackbar,
+  Alert,
+} from "@mui/material";
 import PageContainer from "@/app/(DashboardLayout)/components/container/PageContainer";
 import CustomTextField from "@/app/(DashboardLayout)/components/forms/theme-elements/CustomTextField";
 import DashboardCard from "../components/shared/DashboardCard";
@@ -13,16 +20,15 @@ import { useAuth } from "@/contexts/JWTContext/AuthContext.provider";
 import { numStyle, Asterisk, onKeyDown } from "../components/StylesnS";
 import axiosApi from "@/utils/axiosApi";
 import { BACKEND_BASE_URL } from "@/config";
-
+import toast, { Toaster } from "react-hot-toast";
 const DakEntry = () => {
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
 
   const auth: any = useAuth();
 
   const [editMode, seEditMode] = useState(false);
-
+  const [open, setOpen] = useState(false);
   const [rows, setRows] = useState<any>([]);
-
   const [formData, setFormData] = useState({
     name: "",
     diary_No: "",
@@ -78,7 +84,12 @@ const DakEntry = () => {
 
         return (
           <>
-            <Button variant="contained" color="primary" onClick={handleClick}>
+            <Button
+              title="edit"
+              variant="contained"
+              color="primary"
+              onClick={handleClick}
+            >
               <EditNoteIcon />
             </Button>
           </>
@@ -86,6 +97,17 @@ const DakEntry = () => {
       },
     },
   ];
+  const notify = () => toast("Data Entry Succuss");
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   const handleSubmit = async () => {
     try {
@@ -99,6 +121,10 @@ const DakEntry = () => {
             },
           }
         );
+
+        if (res) {
+          toast.success("Data Edit successful!");
+        }
         setFormData({ name: "", diary_No: "", amount_Claimed: "" });
       } else {
         const res = await axios.post(
@@ -110,7 +136,12 @@ const DakEntry = () => {
             },
           }
         );
+        if (res) {
+          toast.success("Data entry successful!");
+        }
       }
+      setOpen(true);
+
       getData();
       setFormData({
         name: "",
@@ -145,13 +176,13 @@ const DakEntry = () => {
       ...item,
       id: index + 1,
     }));
-    setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    setRows(rowData);
   };
 
   const handleChange = (e: any) => {
     const value = e.target.value;
     // Regular expression to match only alphanumeric characters
-    const alphanumericRegex = /^[a-zA-Z0-9]*$/;
+    const alphanumericRegex = /^[a-zA-Z0-9/]+$/;
     if (alphanumericRegex.test(value) || value === "") {
       setFormData({ ...formData, diary_No: value });
     }
@@ -237,6 +268,7 @@ const DakEntry = () => {
 
             <Grid item xs={2}>
               <Button
+                title={editMode ? "Edit" : "Submit"}
                 disabled={
                   formData.name === "" ||
                   formData.diary_No === "" ||
@@ -250,6 +282,7 @@ const DakEntry = () => {
               >
                 {editMode ? "Edit" : "Submit"}
               </Button>
+              <Toaster />
             </Grid>
           </Grid>
           <Box

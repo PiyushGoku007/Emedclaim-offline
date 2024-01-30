@@ -26,6 +26,7 @@ import { useAuth } from "@/contexts/JWTContext/AuthContext.provider";
 import PrintData from "@/utils/AmoutReimbPrint";
 import ReactToPrint from "react-to-print";
 import { BACKEND_BASE_URL } from "@/config";
+import toast, { Toaster } from "react-hot-toast";
 
 function AmountReimbursement() {
   const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
@@ -70,7 +71,7 @@ function AmountReimbursement() {
   };
 
   const handleReturn = async () => {
-    const res = axios.put(
+    const res: any = axios.put(
       `${BACKEND_BASE_URL}/api/medical/returnFromReimbursement`,
       returnInfo,
       {
@@ -79,6 +80,9 @@ function AmountReimbursement() {
         },
       }
     );
+    if (res) {
+      toast.success("File return ");
+    }
     getData();
     handleClose();
   };
@@ -143,7 +147,11 @@ function AmountReimbursement() {
         };
 
         return (
-          <Button variant="contained" onClick={handleClick}>
+          <Button
+            title="View Documents"
+            variant="contained"
+            onClick={handleClick}
+          >
             <FileCopyIcon />
           </Button>
         );
@@ -166,6 +174,7 @@ function AmountReimbursement() {
 
         return (
           <Button
+            title="Preview"
             disabled={params.row.status === "Approved"}
             variant="contained"
             color="primary"
@@ -201,13 +210,19 @@ function AmountReimbursement() {
         return (
           <>
             <Button
+              title="reimbursement"
               variant="contained"
               sx={{ marginRight: 1 }}
               onClick={() => handleClick()}
             >
               <AccountBalanceIcon />
             </Button>
-            <Button variant="contained" color="error" onClick={returnModal}>
+            <Button
+              title="Return"
+              variant="contained"
+              color="error"
+              onClick={returnModal}
+            >
               Return
             </Button>
           </>
@@ -341,6 +356,7 @@ function AmountReimbursement() {
             )}
           </Box>
         </Modal>
+        <Toaster />
       </>
     </DashboardCard>
   );
