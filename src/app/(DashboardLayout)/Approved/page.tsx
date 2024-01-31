@@ -19,6 +19,7 @@ import SendIcon from "@mui/icons-material/Send";
 import Preview from "../components/forms/PreviewPage/Preview";
 import { useAuth } from "@/contexts/JWTContext/AuthContext.provider";
 import { BACKEND_BASE_URL } from "@/config";
+import toast, { Toaster } from "react-hot-toast";
 
 const style = {
   position: "absolute" as "absolute",
@@ -160,6 +161,10 @@ function Approval() {
           },
         }
       );
+
+      if (res) {
+        toast.success("File Approved");
+      }
     } catch (err: any) {
       alert(err.messege);
     }
@@ -179,6 +184,9 @@ function Approval() {
           },
         }
       );
+      if (res) {
+        toast.error("File return back successfully");
+      }
     } catch (err: any) {
       alert(err.response.data.message);
     }
@@ -202,7 +210,8 @@ function Approval() {
       ...item,
       id: index + 1,
     }));
-    setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    // setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    setRows(rowData);
   };
 
   useEffect(() => {
@@ -255,6 +264,7 @@ function Approval() {
                   }}
                 >
                   <Button
+                    title="return"
                     color="error"
                     variant="contained"
                     sx={{ mr: 1, borderRadius: 30 }}
@@ -265,11 +275,12 @@ function Approval() {
                   <Box sx={{ flex: "1 1 auto" }} />
 
                   <Button
+                    title="approved"
                     variant="contained"
                     sx={{ borderRadius: 30 }}
                     onClick={handleApprove}
                   >
-                    Approve
+                    Approved
                   </Button>
                 </Box>
               </>
@@ -287,6 +298,7 @@ function Approval() {
                   style={{ width: "100%" }}
                 />
                 <Button
+                  title="send"
                   disabled={remark === ""}
                   variant="contained"
                   endIcon={<SendIcon />}
@@ -300,6 +312,7 @@ function Approval() {
             )}
           </Box>
         </Modal>
+        <Toaster />
       </>
     </DashboardCard>
   );

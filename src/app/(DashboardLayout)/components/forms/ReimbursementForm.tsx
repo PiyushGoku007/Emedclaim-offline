@@ -22,6 +22,7 @@ import Preview from "./PreviewPage/Preview";
 import PrintData from "@/utils/AmoutReimbPrint";
 import ReactToPrint from "react-to-print";
 import { BACKEND_BASE_URL } from "@/config";
+import toast, { Toaster } from "react-hot-toast";
 
 function ReimbursementForm(props: any) {
   const auth: any = useAuth();
@@ -151,6 +152,9 @@ function ReimbursementForm(props: any) {
             },
           }
         );
+        if (res) {
+          toast.success(`File Successfully send to ${formData.submitted_To}`);
+        }
       } else {
         const res = await axios.put(
           `${BACKEND_BASE_URL}/api/medical/reimbursement`,
@@ -161,6 +165,10 @@ function ReimbursementForm(props: any) {
             },
           }
         );
+
+        if (res) {
+          toast.success(`File Successfully send to ${formData.submitted_To}`);
+        }
       }
     } catch (err: any) {
       alert(err.response.data.message);
@@ -225,14 +233,24 @@ function ReimbursementForm(props: any) {
             value={formData.inadmissible_Amount}
             sx={numStyle}
             onChange={(e: any) => {
-              setFormData({ ...formData, inadmissible_Amount: e.target.value });
-              setInadmiAmount(e.target.value);
+              const inputValue = parseFloat(e.target.value); //change
+              const positiveValue = inputValue >= 0 ? inputValue : "";
+              setFormData({ ...formData, inadmissible_Amount: positiveValue });
+              setInadmiAmount(positiveValue.toString());
+            }}
+            onKeyDown={(e: any) => {
+              //change
+              if (e.key === "ArrowDown" && formData.inadmissible_Amount <= 0) {
+                e.preventDefault();
+              }
+              onKeyDown(e);
             }}
             type="number"
-            onKeyDown={onKeyDown}
+            // onKeyDown={onKeyDown}
             variant="outlined"
             fullWidth
           />
+
           {props.info.amount_Claimed < formData.inadmissible_Amount && (
             <FormHelperText error> Enter Valid Input </FormHelperText>
           )}
@@ -415,11 +433,16 @@ function ReimbursementForm(props: any) {
       <Preview formData={props.info} />
 
       <Grid display={"flex"} justifyContent={"space-between"}>
-        <Button variant="contained" onClick={() => props.back("list")}>
+        <Button
+          title="back"
+          variant="contained"
+          onClick={() => props.back("list")}
+        >
           Back
         </Button>
         <Box>
           <Button
+            title="preview"
             sx={{ margin: "0 10px" }}
             disabled={formData.file_Number === "" || !formData.amount_In_Words}
             variant="outlined"
@@ -428,6 +451,7 @@ function ReimbursementForm(props: any) {
             Preview
           </Button>
           <Button
+            title="send"
             disabled={formData.file_Number === "" || !formData.amount_In_Words}
             variant="contained"
             endIcon={<SendIcon />}
@@ -457,6 +481,7 @@ function ReimbursementForm(props: any) {
                   amountReim={amountReim}
                 />
                 <Button
+                  title="close"
                   sx={{ margin: "0 10px" }}
                   variant="outlined"
                   onClick={handlePrintDialogClose}
@@ -464,13 +489,18 @@ function ReimbursementForm(props: any) {
                   Close
                 </Button>
                 <ReactToPrint
-                  trigger={() => <Button variant="contained">Print</Button>}
+                  trigger={() => (
+                    <Button title="print" variant="contained">
+                      Print
+                    </Button>
+                  )}
                   content={() => componentRef.current}
                 />
               </DialogContent>
             </Box>
           </Dialog>
         )}
+        <Toaster />
       </Grid>
     </>
   );

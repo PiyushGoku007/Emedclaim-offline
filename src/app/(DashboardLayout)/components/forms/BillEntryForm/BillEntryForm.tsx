@@ -17,10 +17,9 @@ import Preview from "../PreviewPage/Preview";
 import BillEntryPrint from "@/utils/BillEntryPrint";
 import ReactToPrint from "react-to-print";
 import { BACKEND_BASE_URL } from "@/config";
+import toast, { Toaster } from "react-hot-toast";
 
 function BillEntryForm(props: any) {
-  const API_BASE_URL = process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
-
   const auth: any = useAuth();
 
   const [printDialogOpen, setPrintDialogOpen] = useState(false);
@@ -36,6 +35,7 @@ function BillEntryForm(props: any) {
   };
 
   const date = new Date();
+
   const [formData, setFormData] = useState({
     diary_No: props.info.diary_No,
     bill_No: "",
@@ -61,6 +61,10 @@ function BillEntryForm(props: any) {
           },
         }
       );
+
+      if (res) {
+        toast.success("File Succesfully Submitted");
+      }
     } catch (err: any) {
       alert(err.response.data.message);
     }
@@ -215,6 +219,7 @@ function BillEntryForm(props: any) {
 
       <Grid display={"flex"} justifyContent={"space-between"} mt={5}>
         <Button
+          title="back"
           variant="contained"
           onClick={() => {
             props.back(false);
@@ -243,6 +248,7 @@ function BillEntryForm(props: any) {
               !formData.expenditure ||
               formData.remaining_Budget < 0
             }
+            title="send"
             variant="contained"
             endIcon={<SendIcon />}
             onClick={handleSend}
@@ -268,6 +274,7 @@ function BillEntryForm(props: any) {
                 balance={formData.remaining_Budget}
               />
               <Button
+                title="close"
                 sx={{ margin: "0 10px" }}
                 variant="outlined"
                 onClick={handlePrintDialogClose}
@@ -275,11 +282,16 @@ function BillEntryForm(props: any) {
                 Close
               </Button>
               <ReactToPrint
-                trigger={() => <Button variant="contained">Print</Button>}
+                trigger={() => (
+                  <Button title="print" variant="contained">
+                    Print
+                  </Button>
+                )}
                 content={() => BillEntryRef.current}
               />
             </DialogContent>
           </Box>
+          <Toaster />
         </Dialog>
       )}
     </>

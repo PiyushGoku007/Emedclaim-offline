@@ -28,6 +28,7 @@ import Image from "next/image";
 // import Forgot from "./Forgot";
 
 import toast, { Toaster } from "react-hot-toast";
+import { enqueueSnackbar } from "notistack";
 
 // const passwordValidationRegex =
 //     /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\da-zA-Z]).{8,}$/;
@@ -111,6 +112,10 @@ function Login() {
     console.log(authData, "AUTH DATA");
     if (authData) {
       toast.success("Login Succesfully");
+      // enqueueSnackbar("I am an exception", {
+      //   autoHideDuration: 3000,
+      //   variant: "success",
+      // });
       setError(false);
       setOpen(false);
       setSuccessLogin(true);

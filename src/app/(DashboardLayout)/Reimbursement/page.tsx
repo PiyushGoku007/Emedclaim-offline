@@ -81,7 +81,7 @@ function AmountReimbursement() {
       }
     );
     if (res) {
-      toast.success("File return ");
+      toast.success("File returned ");
     }
     getData();
     handleClose();
@@ -136,7 +136,7 @@ function AmountReimbursement() {
       headerClassName: "super-app-theme--header",
       flex: 1,
       minWidth: 100,
-      renderCell: (params) => {
+      renderCell: (params: any) => {
         const handleClick = () => {
           setModalDisp("docs");
           setDocs({
@@ -165,7 +165,7 @@ function AmountReimbursement() {
       sortable: false,
       minWidth: 100,
       flex: 1,
-      renderCell: (params) => {
+      renderCell: (params: any) => {
         const handlePrev = () => {
           setModalDisp("info");
           setInfo(params.row);
@@ -194,7 +194,7 @@ function AmountReimbursement() {
       minWidth: 160,
       flex: 1,
 
-      renderCell: (params) => {
+      renderCell: (params: any) => {
         const handleClick = () => {
           setInfo(params.row);
           setPage("entry");
@@ -266,7 +266,8 @@ function AmountReimbursement() {
       ...item,
       id: index + 1,
     }));
-    setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    // setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    setRows(rowData);
   };
 
   useEffect(() => {
@@ -345,6 +346,7 @@ function AmountReimbursement() {
                   style={{ width: "100%" }}
                 />
                 <Button
+                  title="Send"
                   disabled={returnInfo.remark_Reimbursement === ""}
                   variant="contained"
                   endIcon={<SendIcon />}

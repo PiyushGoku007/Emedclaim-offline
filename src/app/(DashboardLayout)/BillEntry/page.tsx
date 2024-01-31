@@ -91,7 +91,11 @@ function BillEntryList() {
         };
 
         return (
-          <Button variant="contained" onClick={() => handleClick()}>
+          <Button
+            title="Docs"
+            variant="contained"
+            onClick={() => handleClick()}
+          >
             <FileCopyIcon />
           </Button>
         );
@@ -114,6 +118,7 @@ function BillEntryList() {
 
         return (
           <Button
+            title="Preview"
             disabled={params.row.status === "Approved"}
             variant="contained"
             color="primary"
@@ -143,7 +148,12 @@ function BillEntryList() {
             {params.row.bill_No ? (
               <DoneOutlineIcon />
             ) : (
-              <Button variant="contained" color="primary" onClick={handlePrev}>
+              <Button
+                title="Bill entry"
+                variant="contained"
+                color="primary"
+                onClick={handlePrev}
+              >
                 <AccountBalanceIcon />
               </Button>
             )}
@@ -170,7 +180,8 @@ function BillEntryList() {
       id: index + 1,
     }));
 
-    setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    // setRows(rowData.sort((b: any, a: any) => a.id - b.id));
+    setRows(rowData);
   };
 
   useEffect(() => {
