@@ -100,8 +100,8 @@ function Login() {
       return;
     }
     if (inputCapcha !== capchaCode) {
-      toast.error("Incorrect captcha code");
-      refreshCapcha();
+      toast.error(inputCapcha!=="" ? "Incorrect captcha code": "please enter captcha");
+      if(inputCapcha!=="") refreshCapcha();
       setTryagaincaptcha(true);
       setErrMsg("Incorrect captcha code");
 
