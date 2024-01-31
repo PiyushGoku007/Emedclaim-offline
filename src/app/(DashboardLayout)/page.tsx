@@ -90,6 +90,9 @@ function Login() {
     //   setErrMsg("Fill all Fields");
     //   return;
     // }
+    if (inputCapcha !== "") {
+      refreshCapcha();
+    }
     if (!emailValidationRegex.test(email_id) || password.trim() === "") {
       setErrMsg("Please Enter valid email and password");
       setError(true);
@@ -447,7 +450,7 @@ function Login() {
             </Box>
             <Toaster />
           </Box>
-          {error && (
+          {/* {error && (
             <Typography
               sx={{
                 display: "flex",
@@ -459,7 +462,7 @@ function Login() {
             >
               {errMsg}
             </Typography>
-          )}
+          )} */}
 
           {/* {creMsg && (
             <Typography
