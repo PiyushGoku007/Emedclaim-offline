@@ -113,7 +113,7 @@ export default function MyDropzone(props: any) {
           onChange={handleChange}
         >
           <MenuItem value="">
-            <em>None</em>
+            <em>Select Option</em>
           </MenuItem>
           {toUpload.map((item) => {
             console.log(item, "Item");

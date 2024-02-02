@@ -302,20 +302,24 @@ function AmountReimbursement() {
               },
             }}
           >
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              slots={{ toolbar: GridToolbar }}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
+            {rows.length != 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                slots={{ toolbar: GridToolbar }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
                   },
-                },
-              }}
-              pageSizeOptions={[10]}
-              disableRowSelectionOnClick
-            />
+                }}
+                pageSizeOptions={[10]}
+                disableRowSelectionOnClick
+              />
+            ) : (
+              "No Reimbursement Available"
+            )}
           </Box>
         )}
         <Modal
@@ -328,7 +332,7 @@ function AmountReimbursement() {
             {modalDisp === "info" ? (
               <Preview formData={info} />
             ) : modalDisp === "docs" ? (
-              <DocsPreview documents={docs} />
+              <DocsPreview documents={docs} onClose={handleClose} />
             ) : (
               <>
                 <Typography id="modal-modal-title" variant="h6" component="h2">

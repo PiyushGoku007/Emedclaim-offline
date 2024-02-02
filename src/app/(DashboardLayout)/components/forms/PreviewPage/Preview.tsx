@@ -19,7 +19,8 @@ function Preview(props: any) {
         if (
           !item[0].startsWith("_") &&
           !item[0].endsWith("At") &&
-          typeof item[1] !== "boolean"
+          typeof item[1] !== "boolean" &&
+          !item[0].includes("id")
         ) {
           return (
             <Grid item xs={6} key={index}>
@@ -28,7 +29,9 @@ function Preview(props: any) {
                   item[0].replace(/_/g, " ").slice(1)}{" "}
               </strong>
               :-{" "}
-              {item[0] === "medical_Bill" || item[0] === "test_Report" || item[0] === "hospital_Name"
+              {item[0] === "medical_Bill" ||
+              item[0] === "test_Report" ||
+              item[0] === "hospital_Name"
                 ? item[1].join(", ")
                 : item[1]}
             </Grid>

@@ -198,7 +198,7 @@ function DEForm1(props: any) {
           input={<OutlinedInput size="small" fullWidth />}
           renderValue={(selected) => {
             if (selected.length === 0) {
-              return <em>Placeholder</em>;
+              return <em>Select Hospital</em>;
             }
 
             return selected.join(", ");
@@ -207,7 +207,7 @@ function DEForm1(props: any) {
           inputProps={{ "aria-label": "Without label" }}
         >
           <MenuItem disabled value="">
-            <em>Placeholder</em>
+            <em>Select Hospital</em>
           </MenuItem>
           {HospitalList.map((name) => (
             <MenuItem key={name} value={name}>
@@ -262,7 +262,7 @@ function DEForm1(props: any) {
 
       <Grid item xs={4}>
         <Typography variant="subtitle1" fontWeight={600} component="label">
-          to
+          To
         </Typography>
         <Asterisk />
         <CustomTextField
@@ -296,7 +296,10 @@ function DEForm1(props: any) {
 
       <Grid item xs={4}>
         <FormControl>
-          <FormLabel id="demo-row-radio-buttons-group-label">
+          <FormLabel
+            sx={{ fontWeight: 600 }}
+            id="demo-row-radio-buttons-group-label"
+          >
             CGHS Type <Asterisk />
           </FormLabel>
           <RadioGroup
@@ -321,7 +324,10 @@ function DEForm1(props: any) {
 
       <Grid item xs={4}>
         <FormControl>
-          <FormLabel id="demo-row-radio-buttons-group-label">
+          <FormLabel
+            id="demo-row-radio-buttons-group-label"
+            sx={{ fontWeight: 600 }}
+          >
             Emergency <Asterisk />
           </FormLabel>
           <RadioGroup
@@ -380,7 +386,8 @@ function DEForm1(props: any) {
             formData.emergency === "" ||
             !/^[a-zA-Z, ]*$/.test(formData.patient_Name) ||
             !/^[a-zA-Z, ]*$/.test(formData.nature_Of_Treatment) ||
-            DateError
+            DateError ||
+            !/^[a-zA-Z, ]*$/.test(formData.recomendation_Of)
           }
         >
           Save

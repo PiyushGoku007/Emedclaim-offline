@@ -331,20 +331,24 @@ function AssistantEntryList() {
               },
             }}
           >
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              slots={{ toolbar: GridToolbar }}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
+            {rows.length != 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                slots={{ toolbar: GridToolbar }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
                   },
-                },
-              }}
-              pageSizeOptions={[10]}
-              disableRowSelectionOnClick
-            />
+                }}
+                pageSizeOptions={[10]}
+                disableRowSelectionOnClick
+              />
+            ) : (
+              " No Assistant Entry Available"
+            )}
           </Box>
         )}
         <Toaster />
