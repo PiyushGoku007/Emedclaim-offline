@@ -238,7 +238,7 @@ const DakEntry = () => {
                 variant="outlined"
                 fullWidth
               />
-              {!/^[a-zA-Z(), ]*$/.test(formData.name) && (
+              {!/^[a-zA-Z()., ]*$/.test(formData.name) && (
                 <FormHelperText error> Enter Valid Input </FormHelperText>
               )}
             </Grid>
@@ -250,7 +250,7 @@ const DakEntry = () => {
                 component="label"
                 mb="5px"
               >
-                Claimed Amount
+                Claim Amount
               </Typography>
               <Asterisk />
               <CustomTextField
@@ -273,7 +273,8 @@ const DakEntry = () => {
                   formData.name === "" ||
                   formData.diary_No === "" ||
                   formData.amount_Claimed === "" ||
-                  !/^[a-zA-Z(), ]*$/.test(formData.name)
+                  !/^[a-zA-Z(), ]*$/.test(formData.name) ||
+                  formData.amount_Claimed === "0"
                 }
                 variant="contained"
                 endIcon={editMode ? <EditNoteIcon /> : <SendIcon />}
@@ -292,20 +293,24 @@ const DakEntry = () => {
               },
             }}
           >
-            <DataGrid
-              rows={rows}
-              columns={columns}
-              slots={{ toolbar: GridToolbar }}
-              initialState={{
-                pagination: {
-                  paginationModel: {
-                    pageSize: 10,
+            {rows.length != 0 ? (
+              <DataGrid
+                rows={rows}
+                columns={columns}
+                slots={{ toolbar: GridToolbar }}
+                initialState={{
+                  pagination: {
+                    paginationModel: {
+                      pageSize: 10,
+                    },
                   },
-                },
-              }}
-              pageSizeOptions={[10]}
-              disableRowSelectionOnClick
-            />
+                }}
+                pageSizeOptions={[10]}
+                disableRowSelectionOnClick
+              />
+            ) : (
+              "No Entry Available"
+            )}
           </Box>
         </>
       </DashboardCard>
